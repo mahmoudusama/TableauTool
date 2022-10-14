@@ -24,13 +24,20 @@ label_1.pack(pady=12, padx=10)
 #dirname = os.path.dirname(__file__)
 
 def ExecutableCSV():
+    # Browse the file path
+     filename = filedialog.askopenfilename(initialdir = "/",
+                                          title = "Select " + optionmenu_1.get() + " " + Graphsshown.get() + " Figure File",
+                                          filetypes = (("all files",
+                                                        "*.*"),("Text files",
+                                                        "*.txt*")
+                                                       ))
     SheetName = Graphsshown.get()
     #filename = os.path.join(dirname)
     #print(filename)
     if optionmenu_1.get() == "Overview":
         if Graphsshown.get() == "Total SIMs":
             try:
-                df = pd.read_csv('SH_HP_0004_TotalSIMS_Graph_indicator_Full_Data_data.csv')
+                df = pd.read_csv(filename)
                 executable_df = df.groupby(['Customer Name','Aggregation Date'])["D_Num Devices"].sum()
                 print(executable_df.to_string())
                 executable_df.to_csv(SheetName+'.csv')
@@ -38,7 +45,7 @@ def ExecutableCSV():
                 print("CSV Name Changed or CSV is not in the right location for "+SheetName)
         elif Graphsshown.get() == "Active Live SIMs":
             try:
-                df = pd.read_csv('SH_HP_0002_ActiveLive_SIMs_indicator_graph_Full_Da_data.csv')
+                df = pd.read_csv(filename)
                 executable_df = df.groupby(['Customer Name','Aggregation Date','Other Sim State'])["D_Num Devices"].sum()
                 print(executable_df.to_string())
                 executable_df.to_csv(SheetName + '.csv')
@@ -46,7 +53,7 @@ def ExecutableCSV():
                 print("CSV Name Changed or CSV is not in the right location for "+SheetName)
         elif Graphsshown.get() == "Data":
             try:
-                df = pd.read_csv('SH_HP_0010_DataUsage_Graph_Indicator_Full_Data_data.csv')
+                df = pd.read_csv(filename)
                 executable_df = df.groupby(['Customer Name','Aggregation Date'])["SUM_Bytes"].sum()
                 print(executable_df.to_string())
                 executable_df.to_csv(SheetName + '.csv')
@@ -54,7 +61,7 @@ def ExecutableCSV():
                 print("CSV Name Changed or CSV is not in the right location for "+SheetName)
         elif Graphsshown.get() == "SMS":
             try:
-                df = pd.read_csv('SH_HP_0008_SMS_GraphIndicatr_Full_Data_data.csv')
+                df = pd.read_csv(filename)
                 executable_df = df.groupby(['Customer Name','Aggregation Date'])["Num Sms"].sum()
                 print(executable_df.to_string())
                 #executable_df.to_csv(filename + '/' + SheetName + '.csv')
@@ -63,7 +70,7 @@ def ExecutableCSV():
                 print("CSV Name Changed or CSV is not in the right location for "+SheetName)
         elif Graphsshown.get() == "Voice":
             try:
-                df = pd.read_csv('SH_HP_0014_Voice_Gaph_Indicator_Full_Data_data.csv')
+                df = pd.read_csv(filename)
                 executable_df = df.groupby(['Customer Name','Aggregation Date'])["SUM([Duration])/60","Duration"].sum()
                 print(executable_df.to_string())
                 executable_df.to_csv(SheetName + '.csv')
@@ -71,7 +78,7 @@ def ExecutableCSV():
                 print("CSV Name Changed or CSV is not in the right location for "+SheetName)
         elif Graphsshown.get() == "Data Per Day":
             try:
-                df = pd.read_csv('SH_HP_0006_DataUsage_All_Time_Full_Data_data.csv')
+                df = pd.read_csv(filename)
                 executable_df = df.groupby(['Customer Name','Aggregation Date'])["Bytes"].sum()/1024/1000
                 executable_df = executable_df.astype({'Bytes': 'int'})
                 #print(executable_df.dtypes)
@@ -81,7 +88,7 @@ def ExecutableCSV():
                 print("CSV Name Changed or CSV is not in the right location for "+SheetName)
         elif Graphsshown.get() == "Global Data":
             try:
-                df = pd.read_csv('SH_HP_0012_Usage_Map_6months_Full_Data_data.csv')
+                df = pd.read_csv(filename)
                 executable_df = df.groupby(['Customer Name','serving_country_desc','Aggregation Date'])["Bytes"].sum()/1024/1000
                 executable_df = executable_df.astype({'Bytes': 'int'})
                 #print(executable_df.dtypes)
@@ -91,7 +98,7 @@ def ExecutableCSV():
                 print("CSV Name Changed or CSV is not in the right location for "+SheetName)
         elif Graphsshown.get() == "Weekly SIM Count":
             try:
-                df = pd.read_csv('SH_HP_0005_ActiveLive_Vs_Other_SIMS_Full_Data_data.csv')
+                df = pd.read_csv(filename)
                 executable_df = df.groupby(['Customer Name','Aggregation Date','Other Sim State'])["Num Devices"].sum()
                 print(executable_df.to_string())
                 executable_df.to_csv(SheetName + '.csv')
