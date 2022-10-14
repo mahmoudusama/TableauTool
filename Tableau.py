@@ -3,6 +3,8 @@ import tkinter
 from tkinter import Tk, StringVar
 import customtkinter
 from tkinter.ttk import Label, Combobox, Button
+from pathlib import Path
+import os
 
 
 customtkinter.set_appearance_mode("dark")      # Modes: "System" (standard), "Dark", "Light"
@@ -18,17 +20,20 @@ frame_1.pack(pady=20, padx=60, fill="both", expand=True)
 label_1 = customtkinter.CTkLabel(master=frame_1,justify=tkinter.LEFT)
 label_1.pack(pady=12, padx=10)
 
-
+# To get the directory Name
+#dirname = os.path.dirname(__file__)
 
 def ExecutableCSV():
     SheetName = Graphsshown.get()
+    #filename = os.path.join(dirname)
+    #print(filename)
     if optionmenu_1.get() == "Overview":
         if Graphsshown.get() == "Total SIMs":
             try:
                 df = pd.read_csv('SH_HP_0004_TotalSIMS_Graph_indicator_Full_Data_data.csv')
                 executable_df = df.groupby(['Customer Name','Aggregation Date'])["D_Num Devices"].sum()
                 print(executable_df.to_string())
-                executable_df.to_csv('/Users/OsamaRadwanM/PycharmProjects/TableauTool/'+SheetName+'.csv')
+                executable_df.to_csv(SheetName+'.csv')
             except:
                 print("CSV Name Changed or CSV is not in the right location for "+SheetName)
         elif Graphsshown.get() == "Active Live SIMs":
@@ -36,7 +41,7 @@ def ExecutableCSV():
                 df = pd.read_csv('SH_HP_0002_ActiveLive_SIMs_indicator_graph_Full_Da_data.csv')
                 executable_df = df.groupby(['Customer Name','Aggregation Date','Other Sim State'])["D_Num Devices"].sum()
                 print(executable_df.to_string())
-                executable_df.to_csv('/Users/OsamaRadwanM/PycharmProjects/TableauTool/'+SheetName+'.csv')
+                executable_df.to_csv(SheetName + '.csv')
             except:
                 print("CSV Name Changed or CSV is not in the right location for "+SheetName)
         elif Graphsshown.get() == "Data":
@@ -44,7 +49,7 @@ def ExecutableCSV():
                 df = pd.read_csv('SH_HP_0010_DataUsage_Graph_Indicator_Full_Data_data.csv')
                 executable_df = df.groupby(['Customer Name','Aggregation Date'])["SUM_Bytes"].sum()
                 print(executable_df.to_string())
-                executable_df.to_csv('/Users/OsamaRadwanM/PycharmProjects/TableauTool/'+SheetName+'.csv')
+                executable_df.to_csv(SheetName + '.csv')
             except:
                 print("CSV Name Changed or CSV is not in the right location for "+SheetName)
         elif Graphsshown.get() == "SMS":
@@ -52,7 +57,8 @@ def ExecutableCSV():
                 df = pd.read_csv('SH_HP_0008_SMS_GraphIndicatr_Full_Data_data.csv')
                 executable_df = df.groupby(['Customer Name','Aggregation Date'])["Num Sms"].sum()
                 print(executable_df.to_string())
-                executable_df.to_csv('/Users/OsamaRadwanM/PycharmProjects/TableauTool/'+SheetName+'.csv')
+                #executable_df.to_csv(filename + '/' + SheetName + '.csv')
+                executable_df.to_csv(SheetName + '.csv')
             except:
                 print("CSV Name Changed or CSV is not in the right location for "+SheetName)
         elif Graphsshown.get() == "Voice":
@@ -60,12 +66,37 @@ def ExecutableCSV():
                 df = pd.read_csv('SH_HP_0014_Voice_Gaph_Indicator_Full_Data_data.csv')
                 executable_df = df.groupby(['Customer Name','Aggregation Date'])["SUM([Duration])/60","Duration"].sum()
                 print(executable_df.to_string())
-                executable_df.to_csv('/Users/OsamaRadwanM/PycharmProjects/TableauTool/'+SheetName+'.csv')
+                executable_df.to_csv(SheetName + '.csv')
             except:
                 print("CSV Name Changed or CSV is not in the right location for "+SheetName)
-    elif optionmenu_1.get() == "SIM History":
-        if Graphsshown.get() == "SIMs per Home Country":
-
+        elif Graphsshown.get() == "Data Per Day":
+            try:
+                df = pd.read_csv('SH_HP_0006_DataUsage_All_Time_Full_Data_data.csv')
+                executable_df = df.groupby(['Customer Name','Aggregation Date'])["Bytes"].sum()/1024/1000
+                executable_df = executable_df.astype({'Bytes': 'int'})
+                #print(executable_df.dtypes)
+                print(executable_df.to_string())
+                executable_df.to_csv(SheetName + '.csv')
+            except:
+                print("CSV Name Changed or CSV is not in the right location for "+SheetName)
+        elif Graphsshown.get() == "Global Data":
+            try:
+                df = pd.read_csv('SH_HP_0012_Usage_Map_6months_Full_Data_data.csv')
+                executable_df = df.groupby(['Customer Name','serving_country_desc','Aggregation Date'])["Bytes"].sum()/1024/1000
+                executable_df = executable_df.astype({'Bytes': 'int'})
+                #print(executable_df.dtypes)
+                print(executable_df.to_string())
+                executable_df.to_csv(SheetName + '.csv')
+            except:
+                print("CSV Name Changed or CSV is not in the right location for "+SheetName)
+        elif Graphsshown.get() == "Weekly SIM Count":
+            try:
+                df = pd.read_csv('SH_HP_0005_ActiveLive_Vs_Other_SIMS_Full_Data_data.csv')
+                executable_df = df.groupby(['Customer Name','Aggregation Date','Other Sim State'])["Num Devices"].sum()
+                print(executable_df.to_string())
+                executable_df.to_csv(SheetName + '.csv')
+            except:
+                print("CSV Name Changed or CSV is not in the right location for "+SheetName)
 
 
 # For checking the value of ComboBox
